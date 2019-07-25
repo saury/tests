@@ -24,52 +24,40 @@ class TemperatureAlert {
     return result;
   }
 
+  alerts(input) {
+    const result = [];
+    switch (true) {
+      case Number(input) < this.boil - this.fluctuation &&
+        this.status === 'boiling':
+        result.push('unboiling');
+        this.status = 'normal';
+        result.push(...this.alerts(input));
+        break;
+      case Number(input) > this.freeze + this.fluctuation &&
+        this.status === 'freezing':
+        result.push('unfreezing');
+        this.status = 'normal';
+        result.push(...this.alerts(input));
+        break;
+      case Number(input) <= this.freeze && this.status !== 'freezing':
+        result.push('freezing');
+        this.status = 'freezing';
+        break;
+      case Number(input) >= this.boil && this.status !== 'boiling':
+        result.push('boiling');
+        this.status = 'boiling';
+        break;
+      default:
+        break;
+    }
+    return result;
+  }
+
   console(input) {
     const inputs = input.split(' ');
     return inputs
-      .reduce((acc, input) => {
-        acc.push(input);
-        this.unBoilAlert(input, acc);
-        this.unfreezeAlert(input, acc);
-        this.boilAlert(input, acc);
-        this.freezeAlert(input, acc);
-        return acc;
-      }, [])
+      .reduce((acc, input) => [...acc, input, ...this.alerts(input)], [])
       .join(' ');
-  }
-
-  freezeAlert(input, acc) {
-    if (Number(input) <= this.freeze && this.status !== 'freezing') {
-      acc.push('freezing');
-      this.status = 'freezing';
-    }
-  }
-
-  boilAlert(input, acc) {
-    if (Number(input) >= this.boil && this.status !== 'boiling') {
-      acc.push('boiling');
-      this.status = 'boiling';
-    }
-  }
-
-  unfreezeAlert(input, acc) {
-    if (
-      Number(input) > this.freeze + this.fluctuation &&
-      this.status === 'freezing'
-    ) {
-      acc.push('unfreezing');
-      this.status = 'normal';
-    }
-  }
-
-  unBoilAlert(input, acc) {
-    if (
-      Number(input) < this.boil - this.fluctuation &&
-      this.status === 'boiling'
-    ) {
-      acc.push('unboiling');
-      this.status = 'normal';
-    }
   }
 }
 
