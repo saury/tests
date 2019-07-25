@@ -1,4 +1,4 @@
-class TemperatureConsole {
+class TemperatureAlert {
   constructor(inputData) {
     const initData = this.verifiedData(inputData);
     const data = {
@@ -24,7 +24,7 @@ class TemperatureConsole {
     return result;
   }
 
-  alert(input) {
+  console(input) {
     const inputs = input.split(' ');
     return inputs
       .reduce((acc, input) => {
@@ -61,4 +61,4 @@ class TemperatureConsole {
   }
 }
 
-module.exports = TemperatureConsole;
+module.exports = TemperatureAlert;
