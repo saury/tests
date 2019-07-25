@@ -1,46 +1,45 @@
-const TemperatureAlert = require('./index');
+const Thermometer = require('./thermometer');
 
-describe('Test For Temperature Alert Programme', () => {
+describe('Test For Thermometer Class', () => {
   function constructorHelper(data) {
-    const tempAlert = new TemperatureAlert(data);
-    return tempAlert;
+    return new Thermometer(data);
   }
   function consoleHelper(input) {
-    const tempAlert = new TemperatureAlert();
-    const result = tempAlert.console(input);
+    const thermometer = new Thermometer();
+    const result = thermometer.console(input);
     return result;
   }
   it('should have default startup val', () => {
-    const tempAlert = constructorHelper();
-    expect(tempAlert.freeze).toBe(0);
-    expect(tempAlert.boil).toBe(100);
-    expect(tempAlert.fluctuation).toBe(0.5);
+    const thermometer = constructorHelper();
+    expect(thermometer.freeze).toBe(0);
+    expect(thermometer.boil).toBe(100);
+    expect(thermometer.fluctuation).toBe(0.5);
   });
   it('should have a properly working constructor', () => {
-    const tempAlert = constructorHelper({
+    const thermometer = constructorHelper({
       freeze: 1,
       boil: 99,
       fluctuation: 2
     });
-    expect(tempAlert.freeze).toBe(1);
-    expect(tempAlert.boil).toBe(99);
-    expect(tempAlert.fluctuation).toBe(2);
+    expect(thermometer.freeze).toBe(1);
+    expect(thermometer.boil).toBe(99);
+    expect(thermometer.fluctuation).toBe(2);
   });
   it('should set to default if startup val input is not an object', () => {
-    const tempAlert = constructorHelper('test');
-    expect(tempAlert.freeze).toBe(0);
-    expect(tempAlert.boil).toBe(100);
-    expect(tempAlert.fluctuation).toBe(0.5);
+    const thermometer = constructorHelper('test');
+    expect(thermometer.freeze).toBe(0);
+    expect(thermometer.boil).toBe(100);
+    expect(thermometer.fluctuation).toBe(0.5);
   });
   it('should set to default if startup val input is not valid', () => {
-    const tempAlert = constructorHelper({
+    const thermometer = constructorHelper({
       freeze: 'not valid',
       boil: Infinity,
       fluctuation: '0.8'
     });
-    expect(tempAlert.freeze).toBe(0);
-    expect(tempAlert.boil).toBe(100);
-    expect(tempAlert.fluctuation).toBe(0.8);
+    expect(thermometer.freeze).toBe(0);
+    expect(thermometer.boil).toBe(100);
+    expect(thermometer.fluctuation).toBe(0.8);
   });
   it('should console the within-range input value after calling alert fn', () => {
     expect(consoleHelper('4.0')).toBe('4.0');
