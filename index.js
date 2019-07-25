@@ -1,64 +1,53 @@
-class TemperatureAlert {
-  constructor(inputData) {
-    const initData = this.verifiedData(inputData);
-    const data = {
-      freeze: 0,
-      boil: 100,
-      fluctuation: 0.5,
-      ...initData
-    };
-    this.freeze = data.freeze;
-    this.boil = data.boil;
-    this.fluctuation = data.fluctuation;
-    this.status = 'normal';
-  }
+const prompts = require('prompts');
+const Thermometer = require('./thermometer');
 
-  verifiedData(initData) {
-    const result = {};
-    for (const key in initData) {
-      const item = initData[key];
-      if (isFinite(item)) {
-        result[key] = Number(item);
+const onCancel = () => {
+  process.exit(0);
+};
+
+async function init() {
+  return await prompts(
+    [
+      {
+        type: 'text',
+        name: 'freeze',
+        initial: '0',
+        message: 'Set freezing threshold to the thermometer'
+      },
+      {
+        type: 'text',
+        name: 'boil',
+        initial: '100',
+        message: 'Set boiling threshold to the thermometer'
+      },
+      {
+        type: 'text',
+        name: 'fluctuation',
+        initial: '0.5',
+        message: 'Set fluctuation value to the thermometer'
       }
-    }
-    return result;
-  }
-
-  alerts(input) {
-    const result = [];
-    switch (true) {
-      case Number(input) < this.boil - this.fluctuation &&
-        this.status === 'boiling':
-        result.push('unboiling');
-        this.status = 'normal';
-        result.push(...this.alerts(input));
-        break;
-      case Number(input) > this.freeze + this.fluctuation &&
-        this.status === 'freezing':
-        result.push('unfreezing');
-        this.status = 'normal';
-        result.push(...this.alerts(input));
-        break;
-      case Number(input) <= this.freeze && this.status !== 'freezing':
-        result.push('freezing');
-        this.status = 'freezing';
-        break;
-      case Number(input) >= this.boil && this.status !== 'boiling':
-        result.push('boiling');
-        this.status = 'boiling';
-        break;
-      default:
-        break;
-    }
-    return result;
-  }
-
-  console(input) {
-    const inputs = input.split(' ');
-    return inputs
-      .reduce((acc, input) => [...acc, input, ...this.alerts(input)], [])
-      .join(' ');
-  }
+    ],
+    { onCancel }
+  );
 }
 
-module.exports = TemperatureAlert;
+async function inputVal(thermometer) {
+  const input = await prompts(
+    {
+      type: 'text',
+      name: 'value',
+      initial: '4.0 1.0 0.5 0.0 -0.5 0.0 0.5 0.0 -2.0 0.0 0.5 0.6 2.0',
+      message: 'Input your value, separate them by using whitespace!'
+    },
+    { onCancel }
+  );
+  const result = thermometer.console(input.value);
+  console.log(result);
+  await inputVal(thermometer);
+}
+
+(async () => {
+  const initData = await init();
+  const thermometer = new Thermometer(initData);
+  await inputVal(thermometer);
+})();

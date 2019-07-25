@@ -54,9 +54,10 @@ module.exports = class Thermometer {
   }
 
   console(input) {
-    const inputs = input.split(' ');
+    if (!input) return '';
+    const inputs = input.trim().split(' ');
     return inputs
-      .reduce((acc, input) => [...acc, input, ...this.alerts(input)], [])
+      .reduce((acc, _input) => [...acc, _input, ...this.alerts(_input)], [])
       .join(' ');
   }
 };

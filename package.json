@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "jest": "^24.8.0"
+  },
+  "dependencies": {
+    "prompts": "^2.1.0"
   }
 }

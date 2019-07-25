@@ -2682,7 +2682,7 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.npm.taobao.org/process-nextick-args/download/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha1-eCDZsWEgzFXKmud5JoCufbptf+I=
 
-prompts@^2.0.1:
+prompts@^2.0.1, prompts@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/prompts/download/prompts-2.1.0.tgz#bf90bc71f6065d255ea2bdc0fe6520485c1b45db"
   integrity sha1-v5C8cfYGXSVeor3A/mUgSFwbRds=
