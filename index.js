@@ -29,35 +29,47 @@ class TemperatureAlert {
     return inputs
       .reduce((acc, input) => {
         acc.push(input);
-        // unboiling
-        if (
-          Number(input) < this.boil - this.fluctuation &&
-          this.status === 'boiling'
-        ) {
-          acc.push('unboiling');
-          this.status = 'normal';
-        }
-        // unfreezing
-        if (
-          Number(input) > this.freeze + this.fluctuation &&
-          this.status === 'freezing'
-        ) {
-          acc.push('unfreezing');
-          this.status = 'normal';
-        }
-        // boiling
-        if (Number(input) >= this.boil && this.status !== 'boiling') {
-          acc.push('boiling');
-          this.status = 'boiling';
-        }
-        // freezing
-        if (Number(input) <= this.freeze && this.status !== 'freezing') {
-          acc.push('freezing');
-          this.status = 'freezing';
-        }
+        this.unBoilAlert(input, acc);
+        this.unfreezeAlert(input, acc);
+        this.boilAlert(input, acc);
+        this.freezeAlert(input, acc);
         return acc;
       }, [])
       .join(' ');
+  }
+
+  freezeAlert(input, acc) {
+    if (Number(input) <= this.freeze && this.status !== 'freezing') {
+      acc.push('freezing');
+      this.status = 'freezing';
+    }
+  }
+
+  boilAlert(input, acc) {
+    if (Number(input) >= this.boil && this.status !== 'boiling') {
+      acc.push('boiling');
+      this.status = 'boiling';
+    }
+  }
+
+  unfreezeAlert(input, acc) {
+    if (
+      Number(input) > this.freeze + this.fluctuation &&
+      this.status === 'freezing'
+    ) {
+      acc.push('unfreezing');
+      this.status = 'normal';
+    }
+  }
+
+  unBoilAlert(input, acc) {
+    if (
+      Number(input) < this.boil - this.fluctuation &&
+      this.status === 'boiling'
+    ) {
+      acc.push('unboiling');
+      this.status = 'normal';
+    }
   }
 }
 
